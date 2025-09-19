@@ -37,112 +37,113 @@
     <button class="download-btn" onclick="downloadCSV()">⬇ Download Results (CSV)</button>
   </div>
 
-  <script>
-    /* ================= CONFIG: published CSV link ================= */
-    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTYoM-aMGEb-5y2ePc3FAfGQ6EzZ-7-NQQSKEC6bsBwhQ9UTpmH5t5A_I8mmObVWrDG2uApWJm_GM3b/pub?output=csv";
+<script>
+  /* ================= CONFIG: published CSV link ================= */
+  const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTYoM-aMGEb-5y2ePc3FAfGQ6EzZ-7-NQQSKEC6bsBwhQ9UTpmH5t5A_I8mmObVWrDG2uApWJm_GM3b/pub?output=csv";
 
-    let SHEET_ROWS = [];
-    let COLS = null;
+  let SHEET_ROWS = [];
 
-    function parseCSV(text){
-      const rows = [];
-      let cur = [], val = "", inQuotes = false;
-      function pushVal(){ cur.push(val); val = ""; }
-      function pushRow(){ rows.push(cur); cur = []; }
-      for (let i=0;i<text.length;i++){
-        const c = text[i], n = text[i+1];
-        if (inQuotes){
-          if (c === '"' && n === '"'){ val += '"'; i++; }
-          else if (c === '"'){ inQuotes = false; }
-          else { val += c; }
-        } else {
-          if (c === '"'){ inQuotes = true; }
-          else if (c === ','){ pushVal(); }
-          else if (c === '\n'){ pushVal(); pushRow(); }
-          else if (c === '\r'){ }
-          else { val += c; }
-        }
-      }
-      if (val.length || cur.length){ pushVal(); pushRow(); }
-      return rows.filter(r => r.length && r.some(cell => String(cell).trim() !== ""));
-    }
-
-    function rowsToObjects(rows){
-      const header = rows[0];
-      return rows.slice(1).map(r => {
-        const o = {};
-        header.forEach((h,i) => o[h] = r[i] ?? "");
-        return o;
-      });
-    }
-
-    function renderTable(rows){
-      const tbody = document.querySelector("#userTable tbody");
-      tbody.innerHTML = "";
-
-      const toNum = x => {
-        const n = Number(String(x).trim());
-        return Number.isFinite(n) ? n : NaN;
-      };
-
-      const sorted = rows.slice().sort((a,b)=>{
-        const as = toNum(a["Score"]), bs = toNum(b["Score"]);
-        if (Number.isFinite(as) && Number.isFinite(bs)) return bs - as;
-        return 0;
-      });
-
-      for (const r of sorted){
-        const rowHtml = `<tr>
-          <td>${r["Name"] || '—'} / ${r["Age"] || '—'}</td>
-          <td>${r["Email"] || '—'}</td>
-          <td>${r["Score"] || '—'}</td>
-          <td>${r["Total"] || '—'}</td>
-          <td>${r["SubmittedAt"] || '—'}</td>
-        </tr>`;
-        tbody.insertAdjacentHTML("beforeend", rowHtml);
+  function parseCSV(text){
+    const rows = [];
+    let cur = [], val = "", inQuotes = false;
+    function pushVal(){ cur.push(val); val = ""; }
+    function pushRow(){ rows.push(cur); cur = []; }
+    for (let i=0;i<text.length;i++){
+      const c = text[i], n = text[i+1];
+      if (inQuotes){
+        if (c === '"' && n === '"'){ val += '"'; i++; }
+        else if (c === '"'){ inQuotes = false; }
+        else { val += c; }
+      } else {
+        if (c === '"'){ inQuotes = true; }
+        else if (c === ','){ pushVal(); }
+        else if (c === '\n'){ pushVal(); pushRow(); }
+        else if (c === '\r'){ }
+        else { val += c; }
       }
     }
+    if (val.length || cur.length){ pushVal(); pushRow(); }
+    return rows.filter(r => r.length && r.some(cell => String(cell).trim() !== ""));
+  }
 
-    function downloadCSV(){
-      if (!SHEET_ROWS.length) return;
-      const header = ["Name","Age","Email","Score","Total","SubmittedAt"];
-      const lines = [header.join(",")];
-      for (const r of SHEET_ROWS){
-        const line = [
-          r["Name"] ?? "",
-          r["Age"] ?? "",
-          r["Email"] ?? "",
-          r["Score"] ?? "",
-          r["Total"] ?? "",
-          r["SubmittedAt"] ?? ""
-        ].join(",");
-        lines.push(line);
-      }
-      const csv = lines.join("\n");
-      const blob = new Blob([csv], { type: "text/csv" });
-      const link = document.createElement("a");
-      link.href = URL.createObjectURL(blob);
-      link.download = "results.csv";
-      link.click();
+  function rowsToObjects(rows){
+    const header = rows[0];
+    return rows.slice(1).map(r => {
+      const o = {};
+      header.forEach((h,i) => o[h] = r[i] ?? "");
+      return o;
+    });
+  }
+
+  function renderTable(rows){
+    const tbody = document.querySelector("#userTable tbody");
+    tbody.innerHTML = "";
+
+    const toNum = x => {
+      const n = Number(String(x).trim());
+      return Number.isFinite(n) ? n : NaN;
+    };
+
+    const sorted = rows.slice().sort((a,b)=>{
+      const as = toNum(a["score"]), bs = toNum(b["score"]);
+      if (Number.isFinite(as) && Number.isFinite(bs)) return bs - as;
+      return 0;
+    });
+
+    for (const r of sorted){
+      const rowHtml = `<tr>
+        <td>${r["name"] || '—'} / ${r["age"] || '—'}</td>
+        <td>${r["email"] || '—'}</td>
+        <td>${r["score"] || '—'}</td>
+        <td>${r["total"] || '—'}</td>
+        <td>${r["submittedAt"] || '—'}</td>
+      </tr>`;
+      tbody.insertAdjacentHTML("beforeend", rowHtml);
     }
+  }
 
-    async function loadSheet(){
-      try{
-        const res = await fetch(SHEET_CSV_URL, { cache: "no-store" });
-        const text = await res.text();
-        const rows = parseCSV(text);
-        if (!rows.length){ console.error("No data in CSV."); return; }
-        SHEET_ROWS = rowsToObjects(rows);
-        renderTable(SHEET_ROWS);
-      } catch(err){
-        console.error("Failed to fetch sheet:", err);
-      }
+  function downloadCSV(){
+    if (!SHEET_ROWS.length) return;
+    const header = ["Name","Age","Email","Score","Total","SubmittedAt"];
+    const lines = [header.join(",")];
+    for (const r of SHEET_ROWS){
+      const line = [
+        r["name"] ?? "",
+        r["age"] ?? "",
+        r["email"] ?? "",
+        r["score"] ?? "",
+        r["total"] ?? "",
+        r["submittedAt"] ?? ""
+      ].join(",");
+      lines.push(line);
     }
+    const csv = lines.join("\n");
+    const blob = new Blob([csv], { type: "text/csv" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "results.csv";
+    link.click();
+  }
 
-    window.onload = loadSheet;
-    window.downloadCSV = downloadCSV;
-    function logout(){ window.location.href = "admin-logout.html"; }
-    window.logout = logout;
-  </script>
+  async function loadSheet(){
+    try{
+      const res = await fetch(SHEET_CSV_URL, { cache: "no-store" });
+      const text = await res.text();
+      const rows = parseCSV(text);
+      if (!rows.length){ console.error("No data in CSV."); return; }
+      SHEET_ROWS = rowsToObjects(rows);
+      renderTable(SHEET_ROWS);
+    } catch(err){
+      console.error("Failed to fetch sheet:", err);
+    }
+  }
+
+  window.onload = loadSheet;
+  window.downloadCSV = downloadCSV;
+  function logout(){ window.location.href = "admin-logout.html"; }
+  window.logout = logout;
+</script>
+
 </body>
 </html>
+
