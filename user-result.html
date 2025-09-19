@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Result</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f4f6fb; display:flex; justify-content:center; align-items:center; height:100vh; margin:0; }
+    .box { background:#fff; padding:30px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.2); text-align:center; width:350px; }
+    input { padding:10px; width:90%; margin:10px 0; border:1px solid #ccc; border-radius:5px; }
+    button { background:#007bff; color:#fff; border:none; padding:10px 20px; border-radius:5px; cursor:pointer; }
+    button:hover { background:#0056b3; }
+    .result { margin-top:20px; font-size:18px; font-weight:bold; }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Check Your Result</h2>
+    <input type="email" id="email" placeholder="Enter your registered email">
+    <button onclick="checkResult()">View Result</button>
+
+    <div class="result" id="resultBox"></div>
+  </div>
+
+  <script>
+    function checkResult() {
+      let email = document.getElementById("email").value.trim();
+      let users = JSON.parse(localStorage.getItem("quizUsers")) || [];
+      let user = users.find(u => u.email === email);
+
+      if(user) {
+        document.getElementById("resultBox").innerHTML = 
+          `Hello <b>${user.name}</b>, Your Score is <b>${user.score}</b>`;
+      } else {
+        document.getElementById("resultBox").innerHTML = " No record found!";
+      }
+    }
+  </script>
+</body>
+</html>

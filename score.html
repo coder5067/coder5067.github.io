@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz Score (Shadow Only)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --brand: #1a73e8;
+      --ok-shadow: rgba(0, 200, 83, 0.35);      
+      --ok-glow: rgba(0, 200, 83, 0.15);
+      --bad-shadow: rgba(244, 67, 54, 0.35);   
+      --bad-glow: rgba(244, 67, 54, 0.12);
+      --bg: #f4f6fb;
+      --text: #222;
+      --card: #fff;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      background: var(--brand);
+      padding: 15px 0;
+      text-align: center;
+      color: white;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+      justify-content: center;
+      margin: 10px 0 0;
+      padding: 0;
+    }
+    nav ul li { position: relative; }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.3s;
+    }
+    nav ul li a:hover { color: #ffd700; }
+    nav ul li ul {
+      list-style: none;
+      padding: 10px;
+      background: #fff;
+      position: absolute;
+      top: 30px;
+      left: 0;
+      display: none;
+      border-radius: 6px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      min-width: 160px;
+    }
+    nav ul li ul li { margin: 0; }
+    nav ul li ul li a {
+      color: #222;
+      display: block;
+      padding: 6px 12px;
+    }
+    nav ul li ul li a:hover {
+      background: #f4f4f4;
+      border-radius: 4px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: var(--card);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .score {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a237e;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .question {
+      margin-bottom: 20px;
+      padding: 16px 18px;
+      border-radius: 12px;
+      background: #fff;
+      transition: box-shadow 0.25s ease, transform 0.2s ease;
+      border: 1px solid rgba(0,0,0,0.06);
+    }
+    .question.correct {
+      box-shadow:
+        0 0 0 3px var(--ok-shadow) inset,
+        0 12px 24px var(--ok-glow);
+    }
+    .question.incorrect {
+      box-shadow:
+        0 0 0 3px var(--bad-shadow) inset,
+        0 12px 24px var(--bad-glow);
+    }
+    .question:hover { transform: translateY(-1px); }
+
+    .q-title { font-weight: 600; margin-bottom: 8px; }
+    .line { margin: 4px 0; }
+
+    .feedback-btn {
+      display: block;
+      margin: 30px auto 10px;
+      background: var(--brand);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 10px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+      text-decoration: none;
+      text-align: center;
+      width: fit-content;
+    }
+    .feedback-btn:hover { background: #0c5ac0; }
+  </style>
+</head>
+<body>
+    <header>
+      <h1>CyberSafe Campus</h1>
+      
+  <nav>
+      <ul class="main-nav">
+        <li><a href="index.html">Home</a></li>
+        <li class="dropdown">
+          <a href="traning.html">Training ▼</a>
+          <ul class="dropdown-menu">
+            <li><a href="phishing.html">Phishing</a></li>
+            <li><a href="safe-browsing.html">Safe Browsing</a></li>
+            <li><a href="password-safety.html">Password Safety</a></li>
+            <li><a href="social-engineering.html">Social Engineering</a></li>
+          </ul>
+        </li>
+        <li><a href="feedback.html">Feedback</a></li>
+      </ul>
+    </nav>
+    </header>
+
+  <div class="container">
+    <div id="result"></div>
+    <a href="feedback.html" class="feedback-btn">Give Feedback</a>
+  </div>
+
+  <script>
+    const correctAnswers = {
+      q1: "Random mix of letters, numbers & symbols",
+      q2: "All of the above",
+      q3: "Home Wi-Fi with WPA2 encryption",
+      q4: "Ignore or delete",
+      q5: "Fixes bugs & improves security",
+      q6: "Use same password everywhere",
+      q7: "Password + Extra verification",
+      q8: "Invoice.exe",
+      q9: "Check reviews & source",
+      q10: "Use PIN or biometrics",
+      q11: "Verify first",
+      q12: "Interactive games",
+      q13: "Regularly",
+      q14: "Personal experience",
+      q15: "Yes",
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    let score = 0;
+    const total = Object.keys(correctAnswers).length;
+
+    for (const key in correctAnswers) {
+      if (params.get(key) === correctAnswers[key]) score++;
+    }
+
+    // --- NEW: identity wiring (name + age, email optional) ---
+    let username = params.get('username') || '';
+    let age      = params.get('age')      || '';
+    let email    = params.get('email')    || '';
+
+    if (!username || !age || !email) {
+      try {
+        const s = JSON.parse(localStorage.getItem('participantSession') || '{}');
+        if (!username) username = s.name || '';
+        if (!age)      age      = s.age  || '';
+        if (!email)    email    = s.email || '';
+      } catch {}
+    }
+    if (!username || !age) {
+      username = username || localStorage.getItem('userName') || '';
+      age      = age      || localStorage.getItem('userAge')  || '';
+      email    = email    || localStorage.getItem('userEmail') || '';
+    }
+
+    // --- NEW BLOCK: save score + answers into participantSession ---
+    const submittedAnswers = {};
+    for (const [k, v] of params.entries()) {
+      if (k.startsWith('q')) submittedAnswers[k] = v;
+    }
+
+    try {
+      const raw = localStorage.getItem('participantSession');
+      const s = raw ? JSON.parse(raw) : {};
+      if (username) s.name = username;
+      if (age)      s.age  = age;
+      if (email)    s.email = email;
+
+      s.score = score;
+      s.answers = submittedAnswers;
+      s.submittedQuizAt = new Date().toISOString();
+
+      localStorage.setItem('participantSession', JSON.stringify(s));
+    } catch (e) {
+      console.warn('Unable to save participantSession', e);
+    }
+    // --- END NEW BLOCK ---
+
+    const emailText = email ? ` • Email: ${email}` : '';
+    const identityBanner = `
+      <div style="
+        background:#e8f1fe;
+        border:1px solid #cfe2ff;
+        color:#1a3a77;
+        padding:10px 12px;
+        border-radius:8px;
+        margin-bottom:16px;
+        font-weight:600;
+      ">
+        Participant: ${username || '—'} (Age: ${age || '—'}${emailText})
+      </div>
+    `;
+
+    let output = identityBanner + `<div class="score">Your Score: ${score} / ${total}</div>`;
+
+    let qNum = 1;
+    for (const key in correctAnswers) {
+      const userAnswer = params.get(key);
+      const correct = correctAnswers[key];
+      const isCorrect = userAnswer === correct;
+      output += `
+        <div class="question ${isCorrect ? "correct" : "incorrect"}">
+          <div class="q-title">Q${qNum}:</div>
+          <div class="line">Your Answer: ${userAnswer ? userAnswer : "Not Answered"}</div>
+          ${isCorrect ? "" : `<div class=\"line\">Correct Answer: ${correct}</div>`}
+        </div>
+      `;
+      qNum++;
+    }
+
+    document.getElementById("result").innerHTML = output;
+
+    document.querySelectorAll("header nav ul li").forEach((item) => {
+      item.addEventListener("mouseenter", () => {
+        const dropdown = item.querySelector("ul");
+        if (dropdown) dropdown.style.display = "block";
+      });
+      item.addEventListener("mouseleave", () => {
+        const dropdown = item.querySelector("ul");
+        if (dropdown) dropdown.style.display = "none";
+      });
+    });
+  </script>
+</body>
+</html>

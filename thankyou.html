@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Thank You - CyberSafe Campus</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+      box-sizing: border-box;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background: linear-gradient(135deg, #2563eb, #1e3a8a);
+      background-size: 400% 400%;
+      animation: gradient 10s ease infinite;
+      color: white;
+      text-align: center;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .thank-wrapper {
+      background: rgba(255, 255, 255, 0.12);
+      backdrop-filter: blur(14px);
+      border-radius: 20px;
+      padding: 45px;
+      width: 430px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      animation: fadeIn 1.5s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: 34px;
+      margin-bottom: 15px;
+      color: #f8fafc;
+    }
+
+    p {
+      font-size: 16px;
+      margin-bottom: 25px;
+      color: #e0e7ff;
+      line-height: 1.6;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 22px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 600;
+      background: linear-gradient(135deg, #1e40af, #2563eb);
+      color: white;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      transform: scale(1.08);
+      background: linear-gradient(135deg, #1d4ed8, #1e3a8a);
+    }
+
+    footer {
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      text-align: center;
+      padding: 12px;
+      background: #1e3a8a;
+      color: #cbd5e1;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <div class="thank-wrapper">
+    <h1>Thank You!</h1>
+    <p>You have successfully completed the Cybersecurity Awareness Training & Quiz.</p>
+    <a href="index.html" class="btn">Back to Home ⬅</a>
+  </div>
+
+  <footer>
+    © 2025 CyberSafe Campus | All Rights Reserved
+  </footer>
+
+  <script>
+    (function () {
+      const KEY = 'feedbackSubmissions';
+      let s = {};
+      try { s = JSON.parse(localStorage.getItem('participantSession') || '{}'); } catch { s = {}; }
+
+      // build final record
+      const record = {
+        id: s.id || `id-${Date.now()}-${Math.floor(Math.random()*1e6)}`,
+        name: s.name || null,
+        email: s.email || null,
+        age: s.age || null,
+        score: (typeof s.score === 'number') ? s.score : null,
+        answers: s.answers || {},
+        feedback: s.feedback || null,
+        startedAt: s.startedAt || null,
+        submittedQuizAt: s.submittedQuizAt || null,
+        submittedFeedbackAt: s.submittedFeedbackAt || new Date().toISOString()
+      };
+
+      // append to list
+      let all = [];
+      try { all = JSON.parse(localStorage.getItem(KEY)) || []; } catch { all = []; }
+      all.push(record);
+      localStorage.setItem(KEY, JSON.stringify(all));
+    })();
+  </script>
+</body>
+</html>

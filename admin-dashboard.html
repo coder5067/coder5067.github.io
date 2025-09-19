@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <style>
+    body { font-family: Arial; background: #f4f4f4; padding: 20px; }
+    .dashboard { background: white; padding: 20px; border-radius: 8px; max-width: 900px; margin: auto; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+    th { background: #007bff; color: white; }
+    button { padding: 10px 15px; margin-top: 10px; margin-right: 10px; border: none; border-radius: 4px; cursor: pointer; }
+    .download-btn { background: #28a745; color: white; }
+    .download-btn:hover { background: #218838; }
+    .logout-btn { background: #dc3545; color: white; float: right; }
+    .logout-btn:hover { background: #b52a37; }
+  </style>
+</head>
+<body>
+  <div class="dashboard">
+    <h2>Admin Dashboard</h2>
+    <button class="logout-btn" onclick="logout()"> Logout 🚪 </button>
+
+    <table id="userTable">
+      <thead>
+        <tr>
+          <th>Name / Age</th>
+          <th>Email</th>
+          <th>Score</th>
+          <th>Feedback</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <button class="download-btn" onclick="downloadCSV()">⬇ Download Results (CSV)</button>
+
+    <a href="admin-feedback.html" style="text-decoration:none;">
+      <button style="
+        background:#1a73e8;
+        color:#fff;
+        padding:12px 20px;
+        border:none;
+        border-radius:8px;
+        font-size:16px;
+        font-weight:bold;
+        cursor:pointer;
+        transition:0.3s ease;
+        box-shadow:0 4px 6px rgba(0,0,0,0.1);
+      "
+      onmouseover="this.style.background='#0d47a1'"
+      onmouseout="this.style.background='#1a73e8'">
+        Go to Feedback
+      </button>
+    </a>
+  </div>
+
+  <script>
+    /* ================= CONFIG: published CSV link ================= */
+    const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQH9yyQdwuO3ZzeDjL0TysWd9-6nZ2TnmNc3fBRl0g9qtzjr7KOI23Sd_hhBEgXUXP6YYWOn_wGBai5/pub?gid=1080352061&single=true&output=csv";
+
+    let SHEET_ROWS = [];
+    let COLS = null;
+
+    function parseCSV(text){
+      const rows = [];
+      let cur = [], val = "", inQuotes = false;
+      function pushVal(){ cur.push(val); val = ""; }
+      function pushRow(){ rows.push(cur); cur = []; }
+      for (let i=0;i<text.length;i++){
+        const c = text[i], n = text[i+1];
+        if (inQuotes){
+          if (c === '"' && n === '"'){ val += '"'; i++; }
+          else if (c === '"'){ inQuotes = false; }
+          else { val += c; }
+        } else {
+          if (c === '"'){ inQuotes = true; }
+          else if (c === ','){ pushVal(); }
+          else if (c === '\n'){ pushVal(); pushRow(); }
+          else if (c === '\r'){ }
+          else { val += c; }
+        }
+      }
+      if (val.length || cur.length){ pushVal(); pushRow(); }
+      return rows.filter(r => r.length && r.some(cell => String(cell).trim() !== ""));
+    }
+
+    function rowsToObjects(rows){
+      const header = rows[0];
+      return rows.slice(1).map(r => {
+        const o = {};
+        header.forEach((h,i) => o[h] = r[i] ?? "");
+        return o;
+      });
+    }
+
+    function inferCols(header){
+      const lower = header.map(h => (h||"").toLowerCase().trim());
+      const find = parts => header[ lower.findIndex(x => parts.every(p => x.includes(p))) ];
+      const name  = find(["name"])  || "Name";
+      const age   = find(["age"])   || "Age";
+      const email = find(["email"]) || "Email";
+      const score = find(["score"]) || "Score";
+      const reserved = new Set([name, age, email, score, timestamp]);
+      const feedbackCols = header.filter(h => h && !reserved.has(h));
+      return { name, age, email, score, feedbackCols };
+    }
+
+    function buildFeedbackString(row, feedbackCols){
+      if (!feedbackCols || feedbackCols.length === 0) return "—";
+      const parts = [];
+      for (const col of feedbackCols){
+        const val = row[col];
+        if (val !== undefined && val !== null && String(val).trim() !== ""){
+          parts.push(`${col}: ${val}`);
+        }
+      }
+      return parts.length ? parts.join(" | ") : "—";
+    }
+
+    function renderTable(rows){
+      const tbody = document.querySelector("#userTable tbody");
+      tbody.innerHTML = "";
+      const toNum = x => {
+        const n = Number(String(x).trim());
+        return Number.isFinite(n) ? n : NaN;
+      };
+      const sorted = rows.slice().sort((a,b)=>{
+        const as = toNum(a[COLS.score]), bs = toNum(b[COLS.score]);
+        if (Number.isFinite(as) && Number.isFinite(bs)) return bs - as;
+        return 0;
+      });
+      for (const r of sorted){
+        const feedbackText = buildFeedbackString(r, COLS.feedbackCols);
+        const rowHtml = `<tr>
+          <td>${r[COLS.name] || '—'} / ${r[COLS.age] || '—'}</td>
+          <td>${r[COLS.email] || '—'}</td>
+          <td>${(r[COLS.score] !== undefined && r[COLS.score] !== '') ? r[COLS.score] : '—'}</td>
+          <td>${feedbackText}</td>
+        </tr>`;
+        tbody.insertAdjacentHTML("beforeend", rowHtml);
+      }
+    }
+
+    function downloadCSV(){
+      if (!SHEET_ROWS.length) return;
+      const header = ["Name","Age","Email","Score","Feedback"];
+      const lines = [header.join(",")];
+      for (const r of SHEET_ROWS){
+        const feedback = buildFeedbackString(r, COLS.feedbackCols).replace(/"/g,'""');
+        const line = [
+          r[COLS.name] ?? "",
+          r[COLS.age] ?? "",
+          r[COLS.email] ?? "",
+          r[COLS.score] ?? "",
+          `"${feedback}"`
+        ].join(",");
+        lines.push(line);
+      }
+      const csv = lines.join("\n");
+      const blob = new Blob([csv], { type: "text/csv" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = "results.csv";
+      link.click();
+    }
+
+    async function loadSheet(){
+      try{
+        const res = await fetch(SHEET_CSV_URL, { cache: "no-store" });
+        const text = await res.text();
+        const rows = parseCSV(text);
+        if (!rows.length){ console.error("No data in CSV."); return; }
+        COLS = inferCols(rows[0]);
+        SHEET_ROWS = rowsToObjects(rows);
+        renderTable(SHEET_ROWS);
+      } catch(err){
+        console.error("Failed to fetch sheet:", err);
+      }
+    }
+
+    window.onload = loadSheet;
+    window.downloadCSV = downloadCSV;
+    function logout(){ window.location.href = "admin-logout.html"; }
+    window.logout = logout;
+  </script>
+</body>
+</html>

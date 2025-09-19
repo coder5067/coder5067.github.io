@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Phishing Awareness</title>
+
+  <!-- Match font with Safe Browsing -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    /* === Header & Nav: match exactly + keep Training click-through === */
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: #f4f6fb;
+    }
+
+    header {
+      background: #1a73e8;
+      padding: 15px;
+      text-align: center;
+      color: #fff;
+    }
+
+    header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      /* exact look for "CyberSafe Campus" */
+      margin: 0;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    .main-nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      /* match other pages */
+      padding: 0;
+      /* no extra padding */
+      border-radius: 0;
+      /* no rounded hover bg */
+      transition: none;
+      /* no hover transition */
+    }
+
+    .main-nav a:hover {
+      background: none;
+    }
+
+
+    .main-nav li {
+      position: relative;
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      background: #fff;
+      list-style: none;
+      padding: 8px 0;
+      margin: 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      top: 100%;
+      left: 0;
+      min-width: 150px;
+      z-index: 100;
+    }
+
+    .dropdown-menu li a {
+      color: #333;
+      padding: 6px 12px;
+      display: block;
+      text-decoration: none;
+    }
+
+    .dropdown:hover .dropdown-menu {
+      display: block;
+    }
+
+    .hero {
+      position: relative;
+      text-align: center;
+      padding: 60px 20px;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .hero h1 {
+      margin: 0;
+      color: #fff;
+      font-size: 36px;
+      font-weight: bold;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(-45deg, #1a73e8, #0d47a1, #42a5f5, #1976d2);
+      background-size: 400% 400%;
+      animation: gradientSlide 10s ease infinite;
+      z-index: 1;
+      opacity: 0.9;
+      border-radius: 0 0 20px 20px;
+    }
+
+    @keyframes gradientSlide {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    @keyframes gradientBG {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .hero-content h1 {
+      font-size: 36px;
+      font-weight: 800;
+      margin: 0;
+      text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
+      letter-spacing: .3px;
+    }
+
+    /* Container & intro (match widths/spacing) */
+    .module-container {
+      max-width: 900px;
+      margin: 30px auto;
+      background: var(--card);
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .intro {
+      font-size: 16px;
+      margin-bottom: 20px;
+      text-align: center;
+      color: var(--ink);
+    }
+
+    /* Video card (same as Safe Browsing pattern) */
+    .video-card {
+      background: #fff;
+      padding: 22px;
+      border-radius: 14px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+      margin: 25px auto;
+      max-width: 700px;
+      text-align: center;
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .video-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
+    }
+
+    .video-card h3 {
+      margin: 0 0 18px;
+      font-size: 22px;
+      color: #d62828;
+      font-weight: 800;
+      letter-spacing: .5px;
+    }
+
+    .video-wrapper {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 10px;
+    }
+
+    .video-wrapper iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+      border: none;
+    }
+
+    /* Content cards (copied visual language from Safe Browsing) */
+    .card {
+      background: #fdfdfd;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .card:nth-of-type(odd) {
+      flex-direction: row;
+    }
+
+    .card:nth-of-type(even) {
+      flex-direction: row-reverse;
+    }
+
+    .card img {
+      width: 280px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-content {
+      flex: 1;
+      min-width: 260px;
+    }
+
+    .card-content ul {
+      padding-left: 18px;
+      margin: 8px 0 0;
+    }
+
+    .card h2 {
+      margin: 0 0 6px;
+      color: var(--brand);
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .navigation {
+      margin-top: 15px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .btn {
+      background: #1a73e8;
+      color: #fff;
+      padding: 5px 13px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: 0.2s;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      background: #0d47a1;
+    }
+
+    .btn.secondary {
+      background: #777;
+    }
+
+    .btn.secondary:hover {
+      background: #555;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .card {
+        flex-direction: column !important;
+      }
+
+      .card img,
+      .card-content {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <h1>CyberSafe Campus</h1>
+    <nav>
+      <ul class="main-nav">
+        <li><a href="index.html">Home</a></li>
+        <li class="dropdown">
+          <a href="training.html" class="dropdown-toggle">Training ▼</a>
+          <ul class="dropdown-menu">
+            <li><a href="phishing.html">Phishing</a></li>
+            <li><a href="safe-browsing.html">Safe Browsing</a></li>
+            <li><a href="password-safety.html">Password Safety</a></li>
+            <li><a href="social-engineering.html">Social Engineering</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <style>
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 6px;
+      background: #fff;
+      list-style: none;
+      padding: 8px 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      min-width: 180px;
+      z-index: 99;
+    }
+
+    .dropdown:hover .dropdown-menu {
+      display: block;
+    }
+
+    .dropdown-menu li a {
+      display: block;
+      padding: 8px 14px;
+      color: #333;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .dropdown-menu li a:hover {
+      background: #f3f6ff;
+      color: #0d47a1;
+    }
+  </style>
+
+
+
+  <div class="hero">
+    <h1>Phishing Awareness</h1>
+  </div>
+
+
+
+  <div class="module-container">
+    <p class="intro">
+      Phishing is a Cyberattack in Which Attackers Pose as Trusted Organizations or Individuals to Deceive People Into
+      Sharing Sensitive Information Such as <b>Passwords, Bank Details, or Personal Data</b>. It Remains One of the Most
+      Widespread Online Threats, Especially for Young Adults.
+    </p>
+
+    <!-- Video -->
+    <div class="video-card">
+      <h3>Watch: What is Phishing? 🎣</h3>
+      <div class="video-wrapper">
+        <iframe src="https://www.youtube.com/embed/Wd-T8-VlmhU" title="What is Phishing - YouTube video player"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <!-- Common Types -->
+    <div class="card">
+      <img src="https://img.freepik.com/free-vector/phishing-concept-illustration_114360-1604.jpg"
+        alt="Types of Phishing">
+      <div class="card-content">
+        <h2>Common Types of Phishing</h2>
+        <ul>
+          <li><b>Email Phishing:</b> Fake emails pretending to be from banks or companies.</li>
+          <li><b>Spear Phishing:</b> Personalized attacks using your name or workplace info.</li>
+          <li><b>Smishing:</b> Phishing via SMS with malicious links.</li>
+          <li><b>Vishing:</b> Fraudulent phone calls pretending to be support or banks.</li>
+          <li><b>Clone Phishing:</b> Real emails copied but with fake links.</li>
+          <li><b>Pharming:</b> Redirecting users from real websites to fake ones.</li>
+          <li><b>Crypto/Investment Scams:</b> Fake offers with huge returns.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Real-Life Examples -->
+    <div class="card">
+      <img src="https://img.freepik.com/free-vector/fraudulent-email-concept_23-2148512301.jpg?w=740"
+        alt="Real-Life Examples">
+      <div class="card-content">
+        <h2>Real-Life Examples</h2>
+        <ul>
+          <li>Fake job offers asking you to click attachments → installs malware.</li>
+          <li>Discount shopping sites that steal money.</li>
+          <li>Public Wi-Fi traps capturing your logins.</li>
+          <li>COVID-19 scam emails about donations or vaccines.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Warning Signs -->
+    <div class="card">
+      <img src="https://img.freepik.com/free-vector/online-scam-concept-illustration_114360-7883.jpg"
+        alt="Warning Signs of Phishing">
+      <div class="card-content">
+        <h2>Warning Signs of Phishing</h2>
+        <ul>
+          <li>Generic greetings like “Dear User”.</li>
+          <li>Urgent messages such as “Account blocked in 24 hrs”.</li>
+          <li>Suspicious domains (e.g., paypaI.com instead of paypal.com).</li>
+          <li>Unknown attachments or shortened links.</li>
+          <li>Requests for sensitive data by email/SMS.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Protect Yourself -->
+    <div class="card">
+      <img src="Screenshot 2025-08-28 151506.png" alt="How to Protect Yourself">
+      <div class="card-content">
+        <h2>How to Protect Yourself</h2>
+        <ul>
+          <li>Verify sender email before clicking links.</li>
+          <li>Hover over links to see the real URL.</li>
+          <li>Enable <b>Two-Factor Authentication</b>.</li>
+          <li>Never use public Wi-Fi for banking.</li>
+          <li>Use a password manager for strong unique passwords.</li>
+          <li>Keep browser & apps updated.</li>
+          <li>Report phishing attempts immediately.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Trends -->
+    <div class="card">
+      <img src="Screenshot 2025-08-28 151804.png" alt="Emerging Phishing Trends">
+      <div class="card-content">
+        <h2>Emerging Phishing Trends</h2>
+        <ul>
+          <li>AI-powered phishing emails (perfect grammar, personalized).</li>
+          <li>Deepfake vishing – cloned voices of CEOs or managers.</li>
+          <li>Social media phishing via fake LinkedIn or Instagram profiles.</li>
+          <li>QR Code phishing (Quishing) redirecting to fake login pages.</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="navigation">
+      <a href="traning.html" class="btn secondary">⬅ Back to Training</a>
+      <a href="safe-browsing.html" class="btn">Next: Safe Browsing ➝</a>
+    </div>
+  </div>
+</body>
+
+</html>

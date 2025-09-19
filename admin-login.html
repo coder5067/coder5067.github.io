@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login</title>
+  <style>
+    body { 
+      font-family: Arial; 
+      background: #f4f6fb; 
+      margin: 0; 
+      display:flex; 
+      justify-content:center; 
+      align-items:center; 
+      height:100vh; 
+    }
+    .login-box { 
+      background:#fff; 
+      padding:30px; 
+      border-radius:8px; 
+      box-shadow:0 2px 6px rgba(0,0,0,0.2); 
+      text-align:center; 
+    }
+    input { 
+      padding:10px; 
+      margin:8px; 
+      width:220px; 
+      border:1px solid #ccc; 
+      border-radius:5px; 
+    }
+    button { 
+      background:#1a73e8; 
+      color:#fff; 
+      border:none; 
+      padding:10px 20px; 
+      border-radius:5px; 
+      cursor:pointer; 
+    }
+    button:hover { 
+      background:#0d47a1; 
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Admin Login</h2>
+    <input type="text" id="adminUser" placeholder="Username"><br>
+    <input type="password" id="adminPass" placeholder="Password"><br>
+    <button onclick="adminLogin()">Login</button>
+  </div>
+
+  <script>
+    const admins = [
+      { username: "admin", password: "1234" },
+     
+    ];
+
+    function adminLogin() {
+      const user = document.getElementById("adminUser").value.trim();
+      const pass = document.getElementById("adminPass").value.trim();
+      const found = admins.find(a => a.username === user && a.password === pass);
+
+      if (found) {
+       
+        window.location.href = "admin-dashboard.html?user=" + encodeURIComponent(found.username);
+      } else {
+        alert("Invalid login! Please try again.");
+      }
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+

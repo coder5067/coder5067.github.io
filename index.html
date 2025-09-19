@@ -1,1 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cybersecurity Awareness for Students</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header>
+      <h1>CyberSafe Campus</h1>
+      
+      <nav>
+        <ul class="main-nav">
+          <li><a href="index.html">Home</a></li>
+          <li class="dropdown">
+            <a href="training.html">Training ▼</a>
+            <ul class="dropdown-menu">
+              <li><a href="phishing.html">Phishing</a></li>
+              <li><a href="safe-browsing.html">Safe Browsing</a></li>
+              <li><a href="password-safety.html">Password Safety</a></li>
+              <li><a href="social-engineering.html">Social Engineering</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </header>
+<section class="hero">
+    <div class="hero-content">
+      <h2>Welcome</h2>
+      <p class="sub">🛡️ Become Cyber-Aware in minutes.</p>
+    </div>
+  </section>
 
+  <style>
+    .hero {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(-45deg, #1a73e8, #1976d2, #0d47a1, #42a5f5);
+      background-size: 400% 400%;
+      animation: gradientSlide 12s ease infinite;
+      border-bottom-left-radius: 20px;
+      border-bottom-right-radius: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero h2 {
+      font-size: 50px;
+      font-weight: 800;
+      color: #fff;
+      margin: 0 0 10px;
+      font-family: "Poppins", sans-serif;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero .sub {
+      font-size: 20px;
+      font-weight: 500;
+      color: #fff;
+      opacity: 0.95;
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      position: relative;
+      z-index: 2;
+    }
+
+    @keyframes gradientSlide {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+  </style>
+
+
+    <section class="description">
+      <h3>Why We Created This Website</h3>
+      <p>
+        With the increase in cases of cybercriminal activities including
+        phishing, malware attacks, and data breaches among others, university
+        students are at high risk despite they rarely possess adequate
+        information to protect themselves. This is especially important because
+        as the world goes online, social engineering in terms of acceptable
+        behaviours needs to be well facilitated through structured education.
+      </p>
+      <p>
+        In the current hyperconnected world, the age group of young adults is
+        one of the most digitally active populations. They explore a wide range
+        of work, communication, shopping, financial, and entertainment websites.
+        This has heightened their vulnerability to advanced online threats,
+        including phishing, internet frauds, identity theft, and information
+        breaches.
+      </p>
+      <p>
+        Most young adults feel comfortable in the world of technology but many
+        are unaware of scammers and how they can be persuaded through urgency,
+        emotion, and trust. With such threats, high-quality targeted
+        cybersecurity awareness programs are urgently required that are specific
+        to the actions, tendencies, and online activities of this extreme user
+        base group.
+      </p>
+    </section>
+
+    <section class="next-step">
+  <button onclick="window.location.href='training.html'">Go Through</button>
+</section>
+
+    <!-- Footer with hidden Admin Star -->
+    <footer>
+      <p>
+        &copy; 2025 CyberSafe Campus | All Rights Reserved
+        <a href="admin-login.html" class="secret-star" title="Admin Access">★</a>
+      </p>
+    </footer>
+
+    <style>
+      .secret-star {
+        text-decoration: none;
+        color: #999;           
+        font-size: 12px;       
+        margin-left: 5px;
+        opacity: 0.5;
+        transition: opacity 0.3s, color 0.3s;
+      }
+      .secret-star:hover {
+        opacity: 1;
+        color: #1a73e8;        
+      }
+    </style>
+
+    <script src="script.js"></script>
+  </body>
+</html>

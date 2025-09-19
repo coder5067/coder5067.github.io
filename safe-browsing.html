@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Safe Browsing Awareness</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* === Header & Nav consistency patch === */
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: #f4f6fb;
+    }
+
+    header {
+      background: #1a73e8;
+      padding: 15px;
+      text-align: center;
+      color: #fff;
+    }
+
+    header h1 {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      /* exact look for "CyberSafe Campus" */
+      margin: 0;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    .main-nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 0;
+      /* remove extra padding */
+      border-radius: 0;
+      /* no rounded hover bg */
+      transition: none;
+      /* no hover transition */
+    }
+
+    .main-nav a:hover {
+      background: none;
+    }
+
+    /* Dropdown: open on hover, click still navigates to training.html */
+    .main-nav li {
+      position: relative;
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      background: #fff;
+      list-style: none;
+      padding: 8px 0;
+      margin: 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      top: 100%;
+      left: 0;
+      min-width: 150px;
+      z-index: 100;
+    }
+
+    .dropdown-menu li a {
+      color: #333;
+      padding: 6px 12px;
+      display: block;
+      text-decoration: none;
+    }
+
+    .dropdown:hover .dropdown-menu {
+      display: block;
+    }
+
+    /* === End patch === */
+
+    .hero {
+      position: relative;
+      text-align: center;
+      padding: 60px 20px;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    .hero h1 {
+      margin: 0;
+      color: #fff;
+      font-size: 36px;
+      font-weight: bold;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(-45deg, #1a73e8, #0d47a1, #42a5f5, #1976d2);
+      background-size: 400% 400%;
+      animation: gradientSlide 10s ease infinite;
+      z-index: 1;
+      opacity: 0.9;
+      border-radius: 0 0 20px 20px;
+    }
+
+    @keyframes gradientSlide {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+
+    .module-container {
+      max-width: 900px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .intro {
+      font-size: 16px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .card {
+      background: #fdfdfd;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      border: 1px solid #e3e6eb;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .card img {
+      width: 280px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: #1a73e8;
+    }
+
+    .card-content {
+      flex: 1;
+    }
+
+    .video-card {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .video-card iframe {
+      width: 100%;
+      height: 360px;
+      border-radius: 8px;
+    }
+
+    .navigation {
+      margin-top: 15px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .btn {
+      background: #1a73e8;
+      color: #fff;
+      padding: 5px 13px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: 0.2s;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      background: #0d47a1;
+    }
+
+    .btn.secondary {
+      background: #777;
+    }
+
+    .btn.secondary:hover {
+      background: #555;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>CyberSafe Campus</h1>
+    <nav>
+      <ul class="main-nav">
+        <li><a href="index.html">Home</a></li>
+        <li class="dropdown">
+          <a href="training.html">Training ▼</a>
+          <ul class="dropdown-menu">
+            <li><a href="phishing.html">Phishing</a></li>
+            <li><a href="safe-browsing.html">Safe Browsing</a></li>
+            <li><a href="password-safety.html">Password Safety</a></li>
+            <li><a href="social-engineering.html">Social Engineering</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="hero">
+    <h1>Safe Browsing Awareness</h1>
+  </div>
+
+  <div class="module-container">
+    <p class="intro">
+      Safe browsing means protecting yourself from harmful websites, downloads, and online scams.
+      Many young adults (survey: <b>30% rarely verify websites</b>) are at risk when shopping, banking, or
+      browsing on public Wi-Fi.
+    </p>
+
+    <div class="video-card">
+      <h3>Watch: How to Browse Safely 🌐</h3>
+      <div class="video-wrapper">
+        <iframe src="https://www.youtube.com/embed/bglWBr_rbM0" title="How to Browse Safely - YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+        </iframe>
+      </div>
+    </div>
+
+    <style>
+      .video-card {
+        background: #fff;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
+        margin: 25px auto;
+        max-width: 700px;
+        text-align: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .video-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.254);
+      }
+
+      .video-card h3 {
+        margin-bottom: 15px;
+        font-size: 20px;
+        color: #1a73e8;
+        font-weight: 700;
+        text-align: center;
+      }
+
+      /* Make video responsive */
+      .video-wrapper {
+        position: relative;
+        padding-bottom: 56.25%;
+        /* 16:9 ratio */
+        height: 0;
+        overflow: hidden;
+        border-radius: 10px;
+      }
+
+      .video-wrapper iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 10px;
+      }
+    </style>
+
+
+    <div class="card">
+      <img src="Screenshot 2025-08-28 151930.png" alt="Common Risks">
+      <div class="card-content">
+        <h2>Common Risks</h2>
+        <ul>
+          <li>Visiting fake or malicious websites.</li>
+          <li>Clicking pop-up ads that contain malware.</li>
+          <li>Downloading pirated software infected with viruses.</li>
+          <li>Using public Wi-Fi for sensitive activities.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-content">
+        <h2>Best Practices</h2>
+        <ul>
+          <li>Check for <b>HTTPS</b> (padlock icon) before entering information.</li>
+          <li>Verify domain spelling carefully.</li>
+          <li>Use ad-blockers to avoid malicious pop-ups.</li>
+          <li>Avoid downloading cracked/pirated software.</li>
+          <li>Always log out of accounts after use, especially on shared devices.</li>
+        </ul>
+      </div>
+      <img src="12.png" alt="Best Practices">
+    </div>
+
+    <div class="card">
+      <img src="13.png" alt="Modern Threats">
+      <div class="card-content">
+        <h2>Modern Threats</h2>
+        <ul>
+          <li>Fake browser update popups tricking users to install malware.</li>
+          <li>Malicious Chrome/Firefox extensions stealing data.</li>
+          <li>Drive-by downloads from unsafe websites.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="navigation">
+      <a href="phishing.html" class="btn secondary">⬅ Back to Phishing</a>
+      <a href="password-safety.html" class="btn">Next: Password Safety ➝</a>
+    </div>
+  </div>
+</body>
+
+</html>

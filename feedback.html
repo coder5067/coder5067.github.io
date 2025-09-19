@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Cybersecurity Awareness Study - Feedback</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+</head>
+
+<body>
+  <header>
+    <h1>CyberSafe Campus</h1>
+    <nav>
+      <ul class="main-nav">
+        <li><a href="index.html">Home</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <div class="module-container">
+    <h1>Training Feedback</h1>
+    <p class="intro">
+      Thank you for participating in the Cybersecurity Awareness Study.
+      Please provide your feedback so we can improve the training modules.
+    </p>
+
+    <!-- Participant identity shown here -->
+    <div id="identity" class="info-banner" style="
+      background:#e8f1fe;
+      border:1px solid #cfe2ff;
+      color:#1a3a77;
+      padding:10px 12px;
+      border-radius:8px;
+      margin-bottom:16px;
+      font-weight:600;
+    "></div>
+
+    <form id="feedbackForm" class="feedback-form">
+      <label for="easy">Was the training easy to understand?</label>
+      <select id="easy" name="easy" required>
+        <option value="">-- Select --</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+
+      <label for="informative">Was the training informative?</label>
+      <select id="informative" name="informative" required>
+        <option value="">-- Select --</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+
+      <label for="liked">One thing you liked:</label>
+      <input type="text" id="liked" name="liked" placeholder="Write here..." required>
+
+      <label for="improve">One thing that could be improved:</label>
+      <input type="text" id="improve" name="improve" placeholder="Write here...">
+
+      <label for="recommend">Would you recommend this training to others?</label>
+      <select id="recommend" name="recommend" required>
+        <option value="">-- Select --</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select>
+
+      <button type="submit" class="btn">Submit Feedback ➝</button>
+    </form>
+  </div>
+
+  <script>
+    // Load participant session
+    let s = {};
+    try { s = JSON.parse(localStorage.getItem('participantSession') || '{}'); } catch { }
+
+    // Guard: need at least name + age
+    if (!s.name || !s.age) {
+      window.location.replace('register.html');
+    }
+
+    // Show participant info at the top (unchanged)
+    const emailText = s.email ? ` • Email: ${s.email}` : '';
+    const scoreText = (typeof s.score === 'number') ? ` • Score: ${s.score}` : '';
+    document.getElementById('identity').textContent =
+      `Participant: ${s.name} (Age: ${s.age}${emailText}${scoreText})`;
+
+    // Submit silently to Google Forms and redirect to thankyou.html
+    document.getElementById("feedbackForm").addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const feedbackData = {
+        easy: document.getElementById("easy").value,
+        informative: document.getElementById("informative").value,
+        liked: document.getElementById("liked").value,
+        improve: document.getElementById("improve").value,
+        recommend: document.getElementById("recommend").value,
+      };
+
+      // Persist locally (unchanged behavior)
+      s.feedback = feedbackData;
+      s.submittedFeedbackAt = new Date().toISOString();
+      localStorage.setItem("participantSession", JSON.stringify(s));
+      localStorage.setItem("feedback", JSON.stringify(feedbackData));
+
+      // Google Forms formResponse endpoint (same form as your prefill link)
+      const FORM_RESPONSE_URL = "https://docs.google.com/forms/d/e/1FAIpQLSfkUzmims6TdfhOYEXF6JUDAcHUSmifu1RS6uhSdjLtA8glLg/formResponse";
+
+      // Build POST payload with your exact entry IDs
+      const data = new FormData();
+      data.append("entry.1799182697", s.name || "");        // Name
+      data.append("entry.1547985899", s.age || "");         // Age
+      data.append("entry.1157763018", s.email || "");       // Email
+      data.append("entry.1546871877", s.score ?? "");       // Score
+      data.append("entry.581641062", feedbackData.easy);        // Easy
+      data.append("entry.604385682", feedbackData.informative); // Informative
+      data.append("entry.1232089860", feedbackData.liked);       // Liked
+      data.append("entry.974851201", feedbackData.improve);     // Improve
+      data.append("entry.1983630373", feedbackData.recommend);   // Recommend
+
+      // Silent submit (no-cors makes the response opaque; that's OK)
+      fetch(FORM_RESPONSE_URL, { method: "POST", body: data, mode: "no-cors" })
+        .catch(() => { /* ignore network errors */ })
+        .finally(() => {
+
+          window.location.href = "thankyou.html";
+        });
+    });
+  </script>
+
+</body>
+
+</html>

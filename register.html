@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Start the Quiz</title>
+  <style>
+    :root{
+      --bg-a:#1a73e8; --bg-b:#42a5f5;
+      --card:#ffffff; --ink:#2c3e50; --muted:#6b7280;
+      --brand:#1a73e8; --brand-hover:#185ec0;
+      --ring: rgba(26, 115, 232, 0.25);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol", sans-serif;
+      color:var(--ink);
+      background: linear-gradient(135deg, var(--bg-a), var(--bg-b));
+      display:flex; align-items:center; justify-content:center;
+      padding:24px;
+    }
+    .card{
+      width: 560px; max-width: 92vw;
+      background: var(--card);
+      border-radius: 14px;
+      box-shadow: 0 18px 45px rgba(0,0,0,.18);
+      padding: 32px 34px;
+    }
+    h1{
+      margin: 0 0 18px;
+      font-size: 28px; line-height: 1.2; text-align:center;
+      color: var(--brand); font-weight: 800;
+      letter-spacing: .2px;
+    }
+    .field{ margin-top:16px; }
+    label{
+      display:block; font-weight:700; font-size:15px; margin-bottom:8px;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="email"]{
+      width:100%;
+      appearance:none;
+      border:1px solid #d7dce3;
+      border-radius: 10px;
+      padding: 12px 14px;
+      font-size: 15px;
+      outline: none;
+      transition: border-color .15s ease, box-shadow .15s ease;
+      background:#fff;
+    }
+    input::placeholder{ color:#9aa3af; }
+    input:focus{
+      border-color: var(--brand);
+      box-shadow: 0 0 0 4px var(--ring);
+    }
+    .hint{
+      margin-top:8px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .actions{ margin-top: 22px; }
+    .btn{
+      width:100%;
+      border:0;
+      border-radius: 10px;
+      padding: 13px 16px;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: .2px;
+      cursor:pointer;
+      background: var(--brand);
+      color:#fff;
+      box-shadow: 0 10px 22px rgba(26,115,232,.28);
+      transition: transform .08s ease, background .18s ease, box-shadow .18s ease;
+    }
+    .btn:hover{ background: var(--brand-hover); box-shadow: 0 12px 26px rgba(26,115,232,.32); transform: translateY(-1px); }
+    .error{
+      display:none; margin-top:12px;
+      color:#b00020; background:#ffe9ec; border-left:4px solid #b00020;
+      padding:10px 12px; border-radius:8px; font-size:14px;
+    }
+    @media (max-width:420px){
+      .card{ padding: 24px 20px; }
+      h1{ font-size:24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <main class="card" role="main">
+    <h1>Start the Quiz</h1>
+
+    <form id="startForm" novalidate>
+      <div class="field">
+        <label for="fullName">Full Name</label>
+        <input id="fullName" name="fullName" type="text" placeholder="e.g., Alex Johnson" autocomplete="name" />
+      </div>
+
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" placeholder="e.g., alex@example.com" autocomplete="email" />
+      </div>
+
+      <div class="field">
+        <label for="age">Age</label>
+        <input id="age" name="age" type="number" placeholder="e.g., 20" min="10" max="120" inputmode="numeric" />
+        <p class="hint">Enter your age (10–120).</p>
+      </div>
+
+      <div id="err" class="error" role="alert"></div>
+
+      <div class="actions">
+        <button class="btn" type="submit">Continue to Quiz</button>
+      </div>
+    </form>
+  </main>
+
+  <!-- Session helper -->
+  <script>
+    const SESSION_KEY = 'participantSession';
+    function getSession(){ try{ return JSON.parse(localStorage.getItem(SESSION_KEY))||{} }catch{return {}} }
+    function saveSession(obj){ localStorage.setItem(SESSION_KEY, JSON.stringify(obj)); }
+    function makeId(){ return (crypto && crypto.randomUUID) ? crypto.randomUUID() : 'id-' + Date.now() + '-' + Math.floor(Math.random()*1e9); }
+    function startSession({name,email,age}){
+      const s = { id: makeId(), name: name.trim(), email: email.trim(), age: String(age).trim(), startedAt: new Date().toISOString() };
+      saveSession(s); return s;
+    }
+  </script>
+
+  <!-- Form wiring -->
+  <script>
+    (function(){
+      const form = document.getElementById('startForm');
+      const nameEl = document.getElementById('fullName');
+      const ageEl  = document.getElementById('age');
+      const emailEl= document.getElementById('email');
+      const errEl  = document.getElementById('err');
+
+      function setError(msg){
+        if(!msg){ errEl.style.display='none'; errEl.textContent=''; return; }
+        errEl.textContent = msg;
+        errEl.style.display='block';
+      }
+
+      form.addEventListener('submit', function(e){
+        e.preventDefault();
+        setError('');
+
+        const name = (nameEl.value || '').trim();
+        const ageStr = (ageEl.value || '').trim();
+        const email = (emailEl.value || '').trim();
+        const age = Number(ageStr);
+
+        if (!name){ setError('Please enter your full name.'); nameEl.focus(); return; }
+        if (!email){ setError('Please enter your email.'); emailEl.focus(); return; }
+        if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ setError('Please enter a valid email address.'); emailEl.focus(); return; }
+        if (!ageStr){ setError('Please enter your age.'); ageEl.focus(); return; }
+        if (!Number.isFinite(age) || age < 10 || age > 120){ setError('Age must be between 10 and 120.'); ageEl.focus(); return; }
+
+        // Start a session
+        startSession({ name, email, age });
+
+        // Redirect to quiz
+        window.location.href = 'quiz.html';
+      });
+    })();
+  </script>
+</body>
+</html>

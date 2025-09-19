@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Social Engineering Awareness</title>
+  <link rel="stylesheet" href="style.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: #f4f6fb;
+    }
+
+    header {
+      background: #1a73e8;
+      padding: 15px;
+      text-align: center;
+      color: #fff;
+    }
+
+    header h1 {
+      margin: 0;
+    }
+
+    nav {
+      margin-top: 10px;
+    }
+
+    .main-nav {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .main-nav li {
+      position: relative;
+    }
+
+    .main-nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      background: #fff;
+      list-style: none;
+      padding: 8px 0;
+      margin: 0;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      top: 100%;
+      left: 0;
+      min-width: 150px;
+    }
+
+    .dropdown-menu li a {
+      color: #333;
+      padding: 6px 12px;
+      display: block;
+      text-decoration: none;
+    }
+
+    .dropdown:hover .dropdown-menu {
+      display: block;
+    }
+   
+    .hero {
+  position: relative;
+  text-align: center;
+  padding: 60px 20px;
+  color: #fff;
+  overflow: hidden;
+}
+
+.hero h1 {
+  margin: 0;
+  color: #fff;
+  font-size: 36px;
+  font-weight: bold;
+  position: relative;
+  z-index: 2;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(-45deg, #1a73e8, #0d47a1, #42a5f5, #1976d2);
+  background-size: 400% 400%;
+  animation: gradientSlide 10s ease infinite;
+  z-index: 1;
+  opacity: 0.9;
+  border-radius: 0 0 20px 20px;
+}
+
+@keyframes gradientSlide {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+
+    .module-container {
+      max-width: 900px;
+      margin: 30px auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .intro {
+      font-size: 16px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    iframe {
+      display: block;
+      margin: 0 auto 25px;
+      border-radius: 10px;
+    }
+
+    .card {
+      background: #fdfdfd;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      border: 1px solid #e3e6eb;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .card h2 {
+      margin-top: 0;
+      color: #1a73e8;
+    }
+
+      .card img {
+      width: 280px;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .navigation {
+      margin-top: 15px;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px; 
+    }
+
+    .btn {
+      background: #1a73e8;
+      color: #fff;
+      padding: 5px 13px; 
+      border-radius: 4px;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: 0.2s;
+      display: inline-block;
+    }
+
+    .btn:hover {
+      background: #0d47a1;
+    }
+
+    .btn.secondary {
+      background: #777;
+    }
+
+    .btn.secondary:hover {
+      background: #555;
+    }
+  </style>
+</head>
+<body>
+   <header>
+      <h1>CyberSafe Campus</h1>
+      
+      <nav>
+        <ul class="main-nav">
+          <li><a href="index.html">Home</a></li>
+          <li class="dropdown">
+            <a href="training.html">Training ▼</a>
+            <ul class="dropdown-menu">
+              <li><a href="phishing.html">Phishing</a></li>
+              <li><a href="safe-browsing.html">Safe Browsing</a></li>
+              <li><a href="password-safety.html">Password Safety</a></li>
+              <li><a href="social-engineering.html">Social Engineering</a></li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+    </header>
+  <div class="hero">
+    <h1>Social Engineering Awareness</h1>
+  </div>
+
+  <div class="module-container">
+    <p class="intro">
+      Social engineering is the art of manipulating people into revealing sensitive 
+      information or performing actions that compromise security. 
+      According to the survey, young adults are often vulnerable to 
+      <b>fake job offers, impersonation scams, and emotional manipulation</b>.
+    </p>
+
+<div class="video-card">
+  <h3>Watch: Social Engineering Awareness 🎭</h3>
+  <div class="video-wrapper">
+    <iframe 
+      src="https://www.youtube.com/embed/v7VTJhkJUUY" 
+      title="Social Engineering Awareness - YouTube video player"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen>
+    </iframe>
+  </div>
+</div>
+
+<style>
+  .video-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    margin: 25px auto;
+    max-width: 700px;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .video-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  }
+
+  .video-card h3 {
+    margin-bottom: 15px;
+    font-size: 20px;
+    color: #1a73e8;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  /* Make video responsive */
+  .video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 ratio */
+    height: 0;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+
+  .video-wrapper iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border-radius: 10px;
+  }
+</style>
+    
+    </iframe>
+
+    <div class="card">
+      <div>
+        <h2>Common Tactics</h2>
+        <ul>
+          <li><b>Pretexting:</b> Fake scenarios (e.g., HR asking for bank details).</li>
+          <li><b>Baiting:</b> Free music, movies, or USB drives with malware.</li>
+          <li><b>Tailgating:</b> Entering secure spaces by following staff.</li>
+          <li><b>Impersonation:</b> Pretending to be a boss, bank, or government official.</li>
+        </ul>
+      </div>
+      <img src="17.png" alt="Common Tactics">
+    </div>
+
+    <div class="card">
+      <img src="19.png" alt="Protection Strategies">
+      <div>
+        <h2>Protection Strategies</h2>
+        <ul>
+          <li>Verify identity of unknown callers or email senders.</li>
+          <li>Be skeptical of urgent or “too good to be true” offers.</li>
+          <li>Never plug in untrusted USBs or download unknown files.</li>
+          <li>Follow strict security protocols in offices and schools.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div>
+        <h2>Real-World Examples</h2>
+        <ul>
+          <li>Fake “tech support” calls asking for remote PC access.</li>
+          <li>Scammers posing as delivery staff to enter offices.</li>
+          <li>Crypto giveaway scams on social media.</li>
+          <li>Fake “account verification” emails.</li>
+        </ul>
+      </div>
+      <img src="18.png" alt="Real World Examples">
+    </div>
+
+    <div class="navigation">
+      <a href="password-safety.html" class="btn secondary">⬅ Back to Password Safety</a>
+      <a href="consent.html" class="btn">Proceed ➝ Quiz</a>
+    </div>
+  </div>
+</body>
+</html>
+
+
+
+
+
