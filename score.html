@@ -184,7 +184,6 @@
       if (params.get(key) === correctAnswers[key]) score++;
     }
 
-    // --- NEW: identity wiring (name + age, email optional) ---
     let username = params.get('username') || '';
     let age      = params.get('age')      || '';
     let email    = params.get('email')    || '';
@@ -197,34 +196,27 @@
         if (!email)    email    = s.email || '';
       } catch {}
     }
-    if (!username || !age) {
-      username = username || localStorage.getItem('userName') || '';
-      age      = age      || localStorage.getItem('userAge')  || '';
-      email    = email    || localStorage.getItem('userEmail') || '';
-    }
 
-    // --- NEW BLOCK: save score + answers into participantSession ---
     const submittedAnswers = {};
     for (const [k, v] of params.entries()) {
       if (k.startsWith('q')) submittedAnswers[k] = v;
     }
 
-    try {
-      const raw = localStorage.getItem('participantSession');
-      const s = raw ? JSON.parse(raw) : {};
-      if (username) s.name = username;
-      if (age)      s.age  = age;
-      if (email)    s.email = email;
-
-      s.score = score;
-      s.answers = submittedAnswers;
-      s.submittedQuizAt = new Date().toISOString();
-
-      localStorage.setItem('participantSession', JSON.stringify(s));
-    } catch (e) {
-      console.warn('Unable to save participantSession', e);
-    }
-    // --- END NEW BLOCK ---
+    // Save data to Google Sheet
+    fetch("https://script.google.com/macros/s/AKfycbyk7W476fiPQn1ErR4Wgo_bYXYY4gBahe5mB_KJt3t4hRBXxiMsX09P2HjBR0LlLctX/exec", {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: username,
+        age: age,
+        email: email,
+        score: score,
+        total: total,
+        answers: submittedAnswers,
+        submittedAt: new Date().toISOString()
+      })
+    });
 
     const emailText = email ? ` • Email: ${email}` : '';
     const identityBanner = `
@@ -259,17 +251,6 @@
     }
 
     document.getElementById("result").innerHTML = output;
-
-    document.querySelectorAll("header nav ul li").forEach((item) => {
-      item.addEventListener("mouseenter", () => {
-        const dropdown = item.querySelector("ul");
-        if (dropdown) dropdown.style.display = "block";
-      });
-      item.addEventListener("mouseleave", () => {
-        const dropdown = item.querySelector("ul");
-        if (dropdown) dropdown.style.display = "none";
-      });
-    });
   </script>
 </body>
 </html>
